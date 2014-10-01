@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://jsbsim.sf.net/JSBSimScript.xsl"?>
+<runscript xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://jsbsim.sf.net/JSBSimScript.xsd"
+    name="MK-82-01A">
+  <use aircraft="c310" initialize="reset00"/>
+  <run start="0.00" end="500.00" dt="0.008333333">
+  
+
+        <event name="Start engine: Starter">
+      <description>The starter for both engines is turned on.</description>
+      <condition>simulation/sim-time-sec ge 0.2</condition>
+      <!--   <set name="simulation/do_simple_trim" value="4"/> -->   <!-- on-ground trim -->
+       <set name="propulsion/starter_cmd" value="1"/>
+   
+         
+      <notify/>
+    </event> 
+
+     <event name="Start engine: Cutoff">
+      <description>Cutoff is turned off, allowing fuel to flow.</description>
+      <condition>propulsion/engine[0]/n2 ge 15.0</condition>
+      <set name="propulsion/cutoff_cmd" value="0"/>
+      <set name="fcs/throttle-cmd-norm[0]" value="0.4"/>
+      <set name="fcs/throttle-cmd-norm[1]" value="0.4"/> 
+    </event> 
+  
+       
+      <event>
+      <notify/>
+      <condition>
+      simulation/sim-time-sec >= 8
+      </condition>
+      <set name="fcs/left-brake-cmd-norm" value="0.0"/>
+      <set name="fcs/right-brake-cmd-norm" value="0.0"/>
+   	  <set name="fcs/center-brake-cmd-norm" value="0.0"/>
+   	 <!--  <set name="fcs/elevator-cmd-norm" value="0.01"/>  -->
+    </event> 
+    
+       <event>
+      <notify/>
+      <condition>
+      simulation/sim-time-sec >= 1
+      </condition>
+      <set name="fcs/left-brake-cmd-norm" value="1.0"/>
+      <set name="fcs/right-brake-cmd-norm" value="1.0"/>
+   	  <set name="fcs/center-brake-cmd-norm" value="1.0"/>
+    </event> 
+     
+       
+     
+       
+      
+      
+    
+        <event name="Throttle-up">
+      <description>Move throttle to full for take-off.</description>
+      <condition>propulsion/engine[0]/n2 ge 15.0</condition>
+      <delay>1.0</delay>
+      <set name="fcs/throttle-cmd-norm[0]" value="1.0"/>
+   <set name="fcs/throttle-cmd-norm[1]" value="1.0"/>
+    </event> 
+    </run>
+</runscript>
