@@ -9,7 +9,7 @@ public class HeroUnit extends FlyingObject{
 	HeroUnit(AssetManager mgr, String modelPath, String plane) {
 		
 		super(mgr, modelPath, plane);
-			initMotionProvider();
+			//initMotionrovider();
 			_motion = new SimpleMotion();
 		// TODO Auto-generated constructor stub
 	}
