@@ -15,3 +15,13 @@ public class HeroUnit extends FlyingObject{
 	}
 
 }
+
+
+public void update(double seconds) {
+   _motion.update(second); 
+   ModelInstance m = model();
+   double x = _motion.position().x();
+   double y = _motion.position().y();
+   double z = _motion.position().z();
+   m.transform.setToTranslation(x,y,z);
+}

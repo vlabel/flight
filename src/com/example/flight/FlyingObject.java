@@ -36,8 +36,8 @@ public class FlyingObject implements RenderableProvider {
 	public	 boolean initMotionProvider() {
 		return m_motionProvider.init(plane_);
 	}
-	
-	
-	
+    ModelInstance model() {
+        return model_;
+    }
 
 }

@@ -88,10 +88,13 @@ public class GamePlay implements Screen {
     		unit.initMotionProvider();
     		enemies_.add(unit);
     	}
-    	hero_ = new HeroUnit(game.mgr,"data/Su-27_Flanker.g3db" , "Su-27");
-    	
     }
-        
+    
+
+    private void createHero() {
+    	hero_ = new HeroUnit(game.mgr,"data/Su-27_Flanker.g3db" , "Su-27");
+    }
+
     
 	public GamePlay(StartGame gm) {
 		enemies_ = new ArrayList<EnemyUnit>();
@@ -118,6 +121,7 @@ public class GamePlay implements Screen {
 		models_.Instance().addModel("data/sky/sky.g3db");
 		models_.Instance().addModel("runway/runway.g3db");
 		setEnemies(3);
+        createHero();
 		
 			    runwayInstance = models_.Instance().getModelInstance("runway/runway.g3db");
 		        Quaternion qua2 = new Quaternion();
@@ -147,9 +151,12 @@ public class GamePlay implements Screen {
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         modelBatch.begin(cam);
         validatePosition();
-        modelBatch.render(skyDomeInstance, environment);
+        //modelBatch.render(skyDomeInstance, environment);
         modelBatch.render(loader.m_instances,environment);
-        modelBatch.render(runwayInstance,environment);
+       // modelBatch.render(runwayInstance,environment);
+       // modelBatch.render(models),environment);// get all models from 
+        // modelsManager
+        hero_.update(delta);   
         modelBatch.end();
         stage.act(Gdx.graphics.getDeltaTime());            
         stage.draw();
@@ -157,7 +164,7 @@ public class GamePlay implements Screen {
 
 	
 	public void validatePosition() {
-			float x = PlanePosition.x(); 
+			/*float x = PlanePosition.x(); 
 			float y = PlanePosition.y();
 			float z = PlanePosition.z();
 		
@@ -184,9 +191,10 @@ public class GamePlay implements Screen {
 					//instance.transform.setToTranslation(x,y,z).scale(0.5f,0.5f, 0.5f).rotate(Vector3.X,phi+180).rotate(Vector3.Y,tht).rotate(Vector3.Z,psi - 90 );
 					float delta = 22f;
 				    double xx = x - delta*Math.cos((psi)*Math.PI/180);
-				    double yy = y - delta*Math.sin((180-psi)*Math.PI/180);
+				    double yy = y - delta*Math.sin((180-psi)*Math.PI/180); */
+
 					
-			}
+	}
 	
 	@Override
 	public void dispose() {
