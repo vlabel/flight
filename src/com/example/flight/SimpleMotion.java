@@ -20,6 +20,7 @@ public class SimpleMotion {
 		_ray = new Ray(new Vector3(0,0,0),new Vector3(1,0,0));
 		_priv_position = new Vector3(0,0,0);
 		_direction = new Vector3(1,0,0);
+		_position = new Vector3(0,0,0);
 		_step = 100;
 		_second = 0;
 	}
@@ -39,14 +40,18 @@ public class SimpleMotion {
 		return orientation_;
 	}
 	
-	public long millisecond() {
-		return _millisecond;
+	public double second() {
+		return _second;
+	}
+	
+	public Ray directionRay() {
+		return new Ray(_position,_priv_position);
 	}
 	
 	
 	public void  update()
 	{
-		_millisecond+=_step;
+		_second+=_step;
 		_position = _priv_position.set(_priv_position.x+_direction.x,
 				_priv_position.y+_direction.y,
 				_priv_position.z+_direction.z
@@ -55,10 +60,11 @@ public class SimpleMotion {
 	}
 	
 	public void update(double sec) {
+	_direction.set((float) 0.01, 0, 0);
 		_second += sec;
-		_delsta=sec;
+		_delta=sec;
         _priv_position = _position;
-		_position = _priv_position.set(_priv_position.x+_direction.x,
+		_position.set(_priv_position.x+_direction.x,
 				_priv_position.y+_direction.y,
 				_priv_position.z+_direction.z
 		);

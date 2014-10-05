@@ -153,15 +153,32 @@ public class GamePlay implements Screen {
         validatePosition();
         //modelBatch.render(skyDomeInstance, environment);
         modelBatch.render(loader.m_instances,environment);
-       // modelBatch.render(runwayInstance,environment);
+        modelBatch.render(hero_.model(),environment);
        // modelBatch.render(models),environment);// get all models from 
         // modelsManager
+        updateCamera();
         hero_.update(delta);   
         modelBatch.end();
         stage.act(Gdx.graphics.getDeltaTime());            
         stage.draw();
     }
 
+	private void updateCamera() {
+		
+		
+		Log.w("Positon","Position " +Float.toString(hero_.position().x) + " " + Float.toString(hero_.position().y)+ " " + Float.toString(hero_.position().z));
+		Vector3 end  = new Vector3(0,0,0); 
+		end = hero_.ray().getEndPoint(end, 1);
+		Log.w("Point","End " +Float.toString(end.x) + " " + Float.toString(end.y)+ " " + Float.toString(end.z));
+	    cam.translate(end.x,end.y,end.z);
+	    cam.update();
+	    cam.lookAt(hero_.position().x,
+				hero_.position().y,
+				hero_.position().z);
+	    cam.update();
+		    	
+	}
+	
 	
 	public void validatePosition() {
 			/*float x = PlanePosition.x(); 

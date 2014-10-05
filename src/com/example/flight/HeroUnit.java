@@ -3,6 +3,9 @@ package com.example.flight;
 import android.R.string;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 
 public class HeroUnit extends FlyingObject{
 	private SimpleMotion _motion;
@@ -14,14 +17,21 @@ public class HeroUnit extends FlyingObject{
 		// TODO Auto-generated constructor stub
 	}
 
+ public Vector3 position() {
+	return _motion.position();
 }
+
+ public Ray ray() {
+		return _motion.directionRay();
+	}
 
 
 public void update(double seconds) {
-   _motion.update(second); 
+   _motion.update(seconds); 
    ModelInstance m = model();
-   double x = _motion.position().x();
-   double y = _motion.position().y();
-   double z = _motion.position().z();
+   float x = _motion.position().x;
+   float y = _motion.position().y;
+   float z = _motion.position().z;
    m.transform.setToTranslation(x,y,z);
+}
 }
