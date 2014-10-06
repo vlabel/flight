@@ -11,20 +11,33 @@ public class SimpleMotion {
 	private Quaternion orientation_;
 	private double _second;
 	private double _delta;
+    double _hEnforce;
+    double _vEnforce;
 	private long _step;
 	private Ray    _ray;
 	private Vector3 _direction;
+	private Vector3 _planeDirection;
 	
 	public SimpleMotion () {
 		orientation_ = new Quaternion(0, 0, 0, 1);
 		_ray = new Ray(new Vector3(0,0,0),new Vector3(1,0,0));
 		_priv_position = new Vector3(0,0,0);
 		_direction = new Vector3(1,0,0);
+		_PlaneDirection = new Vector3(1,0,0);
 		_position = new Vector3(0,0,0);
 		_step = 100;
 		_second = 0;
 	}
-	
+        
+    public void setHEnforce( double h) {
+        _hEnforce = h;
+    }
+    
+    public void setVEnforce( double v) {
+        _vEnforce = v;
+    }
+
+
 	public Vector3 startingPosition() {
 		return startingPosition_;
 	}
@@ -36,6 +49,7 @@ public class SimpleMotion {
 	public  Vector3 position() {
 		return _position;
 	}
+
 	public Quaternion orientation() {
 		return orientation_;
 	}
@@ -49,18 +63,12 @@ public class SimpleMotion {
 	}
 	
 	
-	public void  update()
-	{
-		_second+=_step;
-		_position = _priv_position.set(_priv_position.x+_direction.x,
-				_priv_position.y+_direction.y,
-				_priv_position.z+_direction.z
-				);
-
-	}
-	
 	public void update(double sec) {
-	_direction.set((float) 0.01, 0, 0);
+
+        /* new Quater = (Old * Quter(horendf) * Quater(vert) ) approx (sec) */
+        /* moving vector  = (1,0,0)* rotate BY quater  */
+         
+    	_direction.set((float) 0.01, 0, 0);
 		_second += sec;
 		_delta=sec;
         _priv_position = _position;
@@ -68,7 +76,6 @@ public class SimpleMotion {
 				_priv_position.y+_direction.y,
 				_priv_position.z+_direction.z
 		);
-        
         // update model
 	}
 	

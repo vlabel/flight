@@ -170,13 +170,12 @@ public class GamePlay implements Screen {
 		Vector3 end  = new Vector3(0,0,0); 
 		end = hero_.ray().getEndPoint(end, 1);
 		Log.w("Point","End " +Float.toString(end.x) + " " + Float.toString(end.y)+ " " + Float.toString(end.z));
-	    cam.translate(end.x,end.y,end.z);
+	    cam.translate(end.x,end.y,end.z); /* use transform..... */
 	    cam.update();
 	    cam.lookAt(hero_.position().x,
 				hero_.position().y,
 				hero_.position().z);
 	    cam.update();
-		    	
 	}
 	
 	
@@ -289,7 +288,7 @@ public class GamePlay implements Screen {
         slider.setValue(0);
         slider.setBounds(Gdx.graphics.getWidth() -60 , 10, 40, Gdx.graphics.getHeight()-20);
         stage.addActor(slider);                        
-        }
+    }
 	
 	private void createSliderAiler() {
 	    
