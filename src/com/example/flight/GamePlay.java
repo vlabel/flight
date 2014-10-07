@@ -157,7 +157,7 @@ public class GamePlay implements Screen {
        // modelBatch.render(models),environment);// get all models from 
         // modelsManager
         updateCamera();
-        hero_.update(delta);   
+        hero_.update(delta,slider.getValue(),sliderAiler.getValue());   
         modelBatch.end();
         stage.act(Gdx.graphics.getDeltaTime());            
         stage.draw();
@@ -292,7 +292,7 @@ public class GamePlay implements Screen {
 	
 	private void createSliderAiler() {
 	    
-      sliderAiler = new Slider(-10,10,0.2f,false,sliderStyle);
+      sliderAiler = new Slider(-10,10,0.2f,false,sliderStyle); /*renew max y and step */
       sliderAiler.setBounds(360 , 40, Gdx.graphics.getHeight()-20, 40);
       sliderAiler.setValue(0);
       stage.addActor(sliderAiler);                        

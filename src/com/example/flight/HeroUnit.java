@@ -26,12 +26,14 @@ public class HeroUnit extends FlyingObject{
 	}
 
 
-public void update(double seconds) {
-   _motion.update(seconds); 
-   ModelInstance m = model();
-   float x = _motion.position().x;
-   float y = _motion.position().y;
-   float z = _motion.position().z;
-   m.transform.setToTranslation(x,y,z);
+public void update(double seconds,float sliderH,float sliderV) {
+  _motion.setHenforce(sliderH);
+  _motion.setVEnforce(sliderV);
+  _motion.update(seconds); 
+  ModelInstance m = model();
+  float x = _motion.position().x;
+  float y = _motion.position().y;
+  float z = _motion.position().z;
+  m.transform.setToTranslation(x,y,z);
 }
 }
