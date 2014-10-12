@@ -157,7 +157,9 @@ public class GamePlay implements Screen {
        // modelBatch.render(models),environment);// get all models from 
         // modelsManager
         updateCamera();
-        hero_.update(delta,slider.getValue(),sliderAiler.getValue());   
+        hero_.update(delta,slider.getValue(),sliderAiler.getValue());
+//        slider.setValue(0);
+//        sliderAiler.setValue(0);
         modelBatch.end();
         stage.act(Gdx.graphics.getDeltaTime());            
         stage.draw();
@@ -166,11 +168,14 @@ public class GamePlay implements Screen {
 	private void updateCamera() {
 		
 		
-		Log.w("Positon","Position " +Float.toString(hero_.position().x) + " " + Float.toString(hero_.position().y)+ " " + Float.toString(hero_.position().z));
+		//Log.w("Positon","Position " +Float.toString(hero_.position().x) + " " + Float.toString(hero_.position().y)+ " " + Float.toString(hero_.position().z));
 		Vector3 end  = new Vector3(0,0,0); 
-		end = hero_.ray().getEndPoint(end, 1);
-		Log.w("Point","End " +Float.toString(end.x) + " " + Float.toString(end.y)+ " " + Float.toString(end.z));
-	    cam.translate(end.x,end.y,end.z); /* use transform..... */
+		hero_.ray().getEndPoint(end, 50);
+	//	Log.w("Point","End " +Float.toString(end.x) + " " + Float.toString(end.y)+ " " + Float.toString(end.z));
+	//	Log.w("Point","Vector " +Float.toString(hero_.ray().direction.x) + " " + Float.toString(hero_.ray().direction.y)+ " " + Float.toString(hero_.ray().direction.z));
+	//	Log.w("Point","Vector " +Float.toString(hero_.ray().origin.x) + " " + Float.toString(hero_.ray().origin.y)+ " " + Float.toString(hero_.ray().origin.z));
+		Vector3 p = cam.position;
+	    cam.position.set(end.x, end.y, end.z); /* use transform..... */
 	    cam.update();
 	    cam.lookAt(hero_.position().x,
 				hero_.position().y,
@@ -286,6 +291,7 @@ public class GamePlay implements Screen {
         //Create new TouchPad with the created style
         slider = new Slider(-10,10,0.2f,true,sliderStyle);
         slider.setValue(0);
+        
         slider.setBounds(Gdx.graphics.getWidth() -60 , 10, 40, Gdx.graphics.getHeight()-20);
         stage.addActor(slider);                        
     }
