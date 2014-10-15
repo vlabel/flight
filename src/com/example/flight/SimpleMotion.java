@@ -19,9 +19,11 @@ public class SimpleMotion {
 	private Ray    _ray;
 	private Vector3 _direction;
 	private Vector3 _planeDirection;
+	private Quaternion oldOrientation_;
 	
 	public SimpleMotion () {
 		orientation_ = new Quaternion(new Vector3(0,0,1),-90);
+		oldOrientation_ = new Quaternion(new Vector3(0,0,1),-90);
 		_ray = new Ray(new Vector3(0,0,0),new Vector3(1,0,0));
 		_priv_position = new Vector3(0,0,0);
 		_direction = new Vector3(0,1,0);
@@ -82,7 +84,10 @@ public class SimpleMotion {
          Quaternion vq = new Quaternion(new Vector3(1,0,0), _hEnforce);
          vq.mul(hq);
          orientation_.mul(vq);
+         orientation_ = orientation_.slerp(oldOrientation_, 1-(float) sec/2);
+         Log.w("Point","sec " +Double.toString(sec));
          Vector3 v = new Vector3(0,1,0);
+         oldOrientation_.set(orientation_);
     	_direction.set(v.mul(orientation_));
 		_second += sec;
 		Log.w("Point","update " +Float.toString(_hEnforce) + " " + Float.toString(_vEnforce));;

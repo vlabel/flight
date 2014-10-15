@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
@@ -36,6 +37,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -293,7 +295,16 @@ public class GamePlay implements Screen {
         slider.setValue(0);
         
         slider.setBounds(Gdx.graphics.getWidth() -60 , 10, 40, Gdx.graphics.getHeight()-20);
-        stage.addActor(slider);                        
+        stage.addActor(slider);                 
+        slider.addListener(new ClickListener() {
+        	@Override
+        	public void touchUp(InputEvent arg0, float arg1, float arg2,
+        			int arg3, int arg4) {
+        		// TODO Auto-generated method stub
+        		super.touchUp(arg0, arg1, arg2, arg3, arg4);
+        		slider.setValue(0);
+        	}
+        });
     }
 	
 	private void createSliderAiler() {
@@ -301,7 +312,16 @@ public class GamePlay implements Screen {
       sliderAiler = new Slider(-10,10,0.2f,false,sliderStyle); /*renew max y and step */
       sliderAiler.setBounds(360 , 40, Gdx.graphics.getHeight()-20, 40);
       sliderAiler.setValue(0);
-      stage.addActor(sliderAiler);                        
+      stage.addActor(sliderAiler);     
+      sliderAiler.addListener(new ClickListener() {
+      	@Override
+      	public void touchUp(InputEvent arg0, float arg1, float arg2,
+      			int arg3, int arg4) {
+      		// TODO Auto-generated method stub
+      		super.touchUp(arg0, arg1, arg2, arg3, arg4);
+      		sliderAiler.setValue(0);
+      	}
+      });
    	}
 	
 	private Vector3 target(Quaternion q,Vector3 vecI)
