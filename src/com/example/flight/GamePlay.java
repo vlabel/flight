@@ -159,9 +159,8 @@ public class GamePlay implements Screen {
        // modelBatch.render(models),environment);// get all models from 
         // modelsManager
         updateCamera();
-        hero_.update(delta,slider.getValue(),sliderAiler.getValue());
-//        slider.setValue(0);
-//        sliderAiler.setValue(0);
+ //       hero_.update(delta,slider.getValue(),sliderAiler.getValue());
+        hero_.update(delta,touchpad.getKnobPercentY(),touchpad.getKnobPercentX());
         modelBatch.end();
         stage.act(Gdx.graphics.getDeltaTime());            
         stage.draw();
