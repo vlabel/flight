@@ -167,20 +167,20 @@ public class GamePlay implements Screen {
     }
 
 	private void updateCamera() {
+	
+        /* get Vector(0,0,1) 
+         * rotate vector by orientation quaternion 
+         * sum vector to end point */
+
 		
-		
-		//Log.w("Positon","Position " +Float.toString(hero_.position().x) + " " + Float.toString(hero_.position().y)+ " " + Float.toString(hero_.position().z));
 		Vector3 end  = new Vector3(0,0,0); 
 		hero_.ray().getEndPoint(end, 50);
-	//	Log.w("Point","End " +Float.toString(end.x) + " " + Float.toString(end.y)+ " " + Float.toString(end.z));
-	//	Log.w("Point","Vector " +Float.toString(hero_.ray().direction.x) + " " + Float.toString(hero_.ray().direction.y)+ " " + Float.toString(hero_.ray().direction.z));
-	//	Log.w("Point","Vector " +Float.toString(hero_.ray().origin.x) + " " + Float.toString(hero_.ray().origin.y)+ " " + Float.toString(hero_.ray().origin.z));
 		Vector3 p = cam.position;
 	    cam.position.set(end.x, end.y, end.z); /* use transform..... */
 	    cam.update();
 	    cam.lookAt(hero_.position().x,
-				hero_.position().y,
-				hero_.position().z);
+		  	       hero_.position().y,
+			       hero_.position().z);
 	    cam.update();
 	}
 	
