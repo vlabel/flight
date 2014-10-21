@@ -4,6 +4,7 @@ import android.R.string;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
@@ -22,6 +23,11 @@ public class HeroUnit extends FlyingObject{
 	return _motion.position();
 }
 
+ public Quaternion orientation () {
+	 return _motion.orientation();
+ }
+
+ 
  public Ray ray() {
 		return _motion.directionRay();
 	}

@@ -1,8 +1,16 @@
 package com.example.flight;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+
 import android.util.Log;
 public class SimpleMotion {
 	
@@ -27,10 +35,15 @@ public class SimpleMotion {
 	private Vector3 _direction;
 	private Vector3 _planeDirection;
 	private Quaternion oldOrientation_;
+	private Vector3 tracePosition_;
+	
+	Queue<Vector3> trace;
 	
 	public SimpleMotion () {
 		orientation_ = new Quaternion(new Vector3(0,0,1),-90);
 		oldOrientation_ = new Quaternion(new Vector3(0,0,1),-90);
+		tracePosition_ = new  Vector3(0,0,1);
+		trace = new LinkedList<Vector3>();
 		_ray = new Ray(new Vector3(0,0,0),new Vector3(1,0,0));
 		_priv_position = new Vector3(0,0,0);
         _priv_position_Camera = new Vector3(0,0,0); // for camera latency
@@ -69,6 +82,11 @@ public class SimpleMotion {
 		return orientation_;
 	}
 	
+	public Quaternion oldOrientation() {
+		return oldOrientation_;
+	}
+	
+
 	public double second() {
 		return _second;
 	}
@@ -76,7 +94,8 @@ public class SimpleMotion {
 	public Ray directionRay() {
 		Vector3 mm = new Vector3(0,0,0);
         
-		mm.set(_priv_position);
+		//mm.set(_priv_position);
+		mm.set(tracePosition_);
 		_norPosition.set(mm.sub(_position));
 		_ray.set(_position,_norPosition.nor());
 		return _ray;
@@ -108,12 +127,23 @@ public class SimpleMotion {
     	_direction.set(v.mul(orientation_));
 		_second += sec;
 		
+		
+		
+		
 		_delta=sec;
         _priv_position.set(_position);
 		_position = _position.set(_priv_position.x+_direction.x,
 		                		_priv_position.y+_direction.y,
 			                	_priv_position.z+_direction.z
 		);
+		
+		trace.add(_priv_position);
+		if (trace.size() >= 100) {
+			tracePosition_.set(trace.remove());
+			
+		}
+		
+		
         // update model
 	}
 	
