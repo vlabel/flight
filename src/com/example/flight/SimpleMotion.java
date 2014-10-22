@@ -36,12 +36,23 @@ public class SimpleMotion {
 	private Vector3 _planeDirection;
 	private Quaternion oldOrientation_;
 	private Vector3 tracePosition_;
+	private Quaternion rollOrientation_;
+	private Quaternion oldRollOrientation_;
+        
+    /* auto pilot mode */
+    private boolean _auto;
+    private Vector3 _point;
+    // container for next point
+    private float   _pointArea;
+
 	
 	Queue<Vector3> trace;
 	
 	public SimpleMotion () {
 		orientation_ = new Quaternion(new Vector3(0,0,1),-90);
 		oldOrientation_ = new Quaternion(new Vector3(0,0,1),-90);
+		rollOrientation_ = new Quaternion(new Vector3(0,0,1),-90);
+		oldRollOrientation_ = new Quaternion(new Vector3(0,0,1),-90);
 		tracePosition_ = new  Vector3(0,0,1);
 		trace = new LinkedList<Vector3>();
 		_ray = new Ray(new Vector3(0,0,0),new Vector3(1,0,0));
@@ -53,6 +64,9 @@ public class SimpleMotion {
 		_norPosition = new Vector3(0,0,0);
 		_step = 100;
 		_second = 0;
+        _point = new Vector3(0,0,0);
+        _pointArea = 3; // distance to next checkpoint
+        _auto = false;
 	}
         
     public void setHEnforce( float h) {
@@ -101,10 +115,33 @@ public class SimpleMotion {
 		return _ray;
 	}
 	
-	
+    /**
+     * @brief set next checkpoint  
+     *
+     * @param point
+     *
+     * @return 
+     */
+    public void setPoint(Vector3 point)  {
+        _point = point ;
+    }
+
+    private void updateAutopilotForces(double sec) {
+        /*   needs to calc new v and h enforces  
+         *
+         *
+          * */
+    
+
+
+    }
+    
+
+
 	public void update(double sec) {
 
         // renew priv positionCamera vby some type  (1 second);
+    // vEnforce - rotation over (010) by 
 
 		_dis = (float) 1;
 	    float vDelta = (float) ((_vEnforce - _vEnforce_dis)*_dis*sec);
@@ -118,9 +155,12 @@ public class SimpleMotion {
 		_hEnforce_dis += hDelta;
          Quaternion hq = new Quaternion(new Vector3(0,0,1), -vEnf);
          Quaternion vq = new Quaternion(new Vector3(1,0,0),hEnf);
+       //  Quaternion rq = new Quaternion(new Vector3(0,1,0),hEnf);
          vq.mul(hq);
          orientation_.mul(vq);
          orientation_ = orientation_.slerp(oldOrientation_, 1-(float) sec*18);
+        // rollOrientation_ = rollOrientation_.slerp(oldRollOrientation_, 1-(float) sec*18);
+        // resultOrientation = orientation*rollOrientation
          Log.w("Point","sec " +Double.toString(sec));
          Vector3 v = new Vector3(0,1,0);
          oldOrientation_.set(orientation_);
