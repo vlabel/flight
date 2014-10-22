@@ -60,6 +60,7 @@ public class GamePlay implements Screen {
 		
 	private ArrayList<EnemyUnit> enemies_;
 	private HeroUnit hero_;
+	float angle;
 	
     private Stage stage;
     private SpriteBatch batch;
@@ -115,12 +116,12 @@ public class GamePlay implements Screen {
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		cam.near = 0.1f;
 		cam.far = 7500f;
-//    	Vector3 v1 = new Vector3(0,0,1);
-//		cam.rotate(v1, 90);
-//		cam.update();
-		Vector3 v2 = new Vector3(1,0,0);
-		cam.rotate(v2, -90);
+    	Vector3 v1 = new Vector3(0,0,1);
+		cam.rotate(v1, -90);
 		cam.update();
+//		Vector3 v2 = new Vector3(1,0,0);
+//		cam.rotate(v2, -90);
+//		cam.update();
 		models_.Instance().setAssetManager(game.mgr);
 		models_.Instance().addModel("data/Su-27_Flanker.g3db");
 		models_.Instance().addModel("data/sky/sky.g3db");
@@ -176,13 +177,15 @@ public class GamePlay implements Screen {
 		Vector3 end  = new Vector3(0,0,0); 
 		hero_.ray().getEndPoint(end, 30);
 		Vector3 p = cam.position;
-	    cam.position.set(end.x+v.x, end.y+v.y, end.z+v.z); /* use transform..... */
+	    cam.position.set(end.x+v.x, end.y+v.y, end.z+v.z).rotate(hero_.ray().direction, hero_.resultOrientation().getYaw() - angle); /* use transform..... */
 	    cam.update();
 	    
 	    cam.lookAt(hero_.position().x+v.x,
 		  	       hero_.position().y+v.y,
 			       hero_.position().z+v.z);
 	    cam.update();
+	    angle = hero_.resultOrientation().getYaw();
+	    
 	 	}
 	
 	

@@ -27,6 +27,9 @@ public class HeroUnit extends FlyingObject{
 	 return _motion.orientation();
  }
 
+ public Quaternion resultOrientation () {
+	 return _motion.resultOrientation();
+ }
  
  public Ray ray() {
 		return _motion.directionRay();
@@ -41,8 +44,7 @@ public void update(double seconds,float sliderH,float sliderV) {
   float x = _motion.position().x;
   float y = _motion.position().y;
   float z = _motion.position().z;
-  //m.transform.setToTranslation(x,y,z);
- m.transform.set(_motion.position(), _motion.orientation());
- 
+  // m.transform.set(_motion.position(), _motion.orientation());
+  m.transform.set(_motion.position(), _motion.resultOrientation());
 }
 }

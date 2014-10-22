@@ -37,6 +37,7 @@ public class SimpleMotion {
 	private Quaternion oldOrientation_;
 	private Vector3 tracePosition_;
 	private Quaternion rollOrientation_;
+	private Quaternion resultOrientation_;
 	private Quaternion oldRollOrientation_;
         
     /* auto pilot mode */
@@ -49,10 +50,11 @@ public class SimpleMotion {
 	Queue<Vector3> trace;
 	
 	public SimpleMotion () {
-		orientation_ = new Quaternion(new Vector3(0,0,1),-90);
+		orientation_ = new Quaternion(0,0,0,0);
 		oldOrientation_ = new Quaternion(new Vector3(0,0,1),-90);
-		rollOrientation_ = new Quaternion(new Vector3(0,0,1),-90);
-		oldRollOrientation_ = new Quaternion(new Vector3(0,0,1),-90);
+		rollOrientation_ = new Quaternion(0,0,0,1);
+		oldRollOrientation_ = new Quaternion(0,0,0,1);
+		resultOrientation_ = new Quaternion(0,0,0,1);
 		tracePosition_ = new  Vector3(0,0,1);
 		trace = new LinkedList<Vector3>();
 		_ray = new Ray(new Vector3(0,0,0),new Vector3(1,0,0));
@@ -96,6 +98,12 @@ public class SimpleMotion {
 		return orientation_;
 	}
 	
+	public Quaternion resultOrientation() {
+//		Quaternion vq = new Quaternion(new Vector3(0,0,1),90);
+//		return vq.mul(resultOrientation_);
+		return resultOrientation_;
+	}
+	
 	public Quaternion oldOrientation() {
 		return oldOrientation_;
 	}
@@ -111,6 +119,7 @@ public class SimpleMotion {
 		//mm.set(_priv_position);
 		mm.set(tracePosition_);
 		_norPosition.set(mm.sub(_position));
+		//_ray.set(_position,_norPosition.nor());
 		_ray.set(_position,_norPosition.nor());
 		return _ray;
 	}
@@ -155,14 +164,19 @@ public class SimpleMotion {
 		_hEnforce_dis += hDelta;
          Quaternion hq = new Quaternion(new Vector3(0,0,1), -vEnf);
          Quaternion vq = new Quaternion(new Vector3(1,0,0),hEnf);
-       //  Quaternion rq = new Quaternion(new Vector3(0,1,0),hEnf);
+         Quaternion rq = new Quaternion(new Vector3(0,1,0),vEnf);
          vq.mul(hq);
          orientation_.mul(vq);
          orientation_ = orientation_.slerp(oldOrientation_, 1-(float) sec*18);
-        // rollOrientation_ = rollOrientation_.slerp(oldRollOrientation_, 1-(float) sec*18);
-        // resultOrientation = orientation*rollOrientation
+      //   rollOrientation_.set(0, 0, 0,1);
+         rollOrientation_.mul(rq);
+         rollOrientation_ = rollOrientation_.slerp(oldRollOrientation_, 1-(float) sec*18);
+         Quaternion tmp = new Quaternion(orientation_);
+         
+         resultOrientation_ = tmp.mul(rollOrientation_);
          Log.w("Point","sec " +Double.toString(sec));
-         Vector3 v = new Vector3(0,1,0);
+         Vector3 v = new Vector3(0,10,0);
+         oldRollOrientation_.set(rollOrientation_);         
          oldOrientation_.set(orientation_);
     	_direction.set(v.mul(orientation_));
 		_second += sec;
@@ -178,7 +192,7 @@ public class SimpleMotion {
 		);
 		
 		trace.add(_priv_position);
-		if (trace.size() >= 100) {
+		if (trace.size() >= 1) {
 			tracePosition_.set(trace.remove());
 			
 		}
