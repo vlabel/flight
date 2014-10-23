@@ -16,9 +16,14 @@ public class HeroUnit extends FlyingObject{
 			//initMotionrovider();
 			_motion = new SimpleMotion();
 			  ModelInstance m = model();
+			  _motion.setAuto(true);
+			  _motion.setPoint(new Vector3(0,1110,0));
 			  // TODO Auto-generated constructor stub
 	}
 
+	
+	
+	
  public Vector3 position() {
 	return _motion.position();
 }

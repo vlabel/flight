@@ -87,9 +87,9 @@ public class GamePlay implements Screen {
     public void setEnemies(int num) {
     	enemies_.clear();
     	for (int i = 0 ; i < num; i++) {
-    		EnemyUnit unit = new EnemyUnit(game.mgr,"data/Su-27_Flanker.g3db","Su-27",m_jsbProvider);
-    		unit.initMotionProvider();
-    		enemies_.add(unit);
+//    		EnemyUnit unit = new EnemyUnit(game.mgr,"data/Su-27_Flanker.g3db","Su-27",m_jsbProvider);
+//    		unit.initMotionProvider();
+//    		enemies_.add(unit);
     	}
     }
     
@@ -115,13 +115,13 @@ public class GamePlay implements Screen {
 		modelBatch = new ModelBatch();
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		cam.near = 0.1f;
-		cam.far = 7500f;
+		cam.far = 17500f;
     	Vector3 v1 = new Vector3(0,0,1);
 		cam.rotate(v1, -90);
 		cam.update();
-//		Vector3 v2 = new Vector3(1,0,0);
-//		cam.rotate(v2, -90);
-//		cam.update();
+		Vector3 v2 = new Vector3(1,0,0);
+		cam.rotate(v2, 90);
+		cam.update();
 		models_.Instance().setAssetManager(game.mgr);
 		models_.Instance().addModel("data/Su-27_Flanker.g3db");
 		models_.Instance().addModel("data/sky/sky.g3db");
@@ -177,7 +177,7 @@ public class GamePlay implements Screen {
 		Vector3 end  = new Vector3(0,0,0); 
 		hero_.ray().getEndPoint(end, 30);
 		Vector3 p = cam.position;
-	    cam.position.set(end.x+v.x, end.y+v.y, end.z+v.z).rotate(hero_.ray().direction, hero_.resultOrientation().getYaw() - angle); /* use transform..... */
+	    cam.position.set(end.x+v.x, end.y+v.y, end.z+v.z); /* use transform..... */
 	    cam.update();
 	    
 	    cam.lookAt(hero_.position().x+v.x,

@@ -72,14 +72,19 @@ public class SimpleMotion {
 	}
         
     public void setHEnforce( float h) {
+    	 if (_auto) return;
         _hEnforce = h;
     }
     
     public void setVEnforce( float v) {
-        _vEnforce = v;
+    	if (_auto) return;
+    	_vEnforce = v;
     }
 
-
+    public  void setAuto(boolean auto) {
+    	_auto = auto;
+    }
+    
 	public Vector3 startingPosition() {
 		return startingPosition_;
 	}
@@ -116,11 +121,11 @@ public class SimpleMotion {
 	public Ray directionRay() {
 		Vector3 mm = new Vector3(0,0,0);
         
-		//mm.set(_priv_position);
-		mm.set(tracePosition_);
+		mm.set(_priv_position);
+		//mm.set(tracePosition_);
 		_norPosition.set(mm.sub(_position));
-		//_ray.set(_position,_norPosition.nor());
 		_ray.set(_position,_norPosition.nor());
+		//_ray.set(_position,_norPosition.nor());
 		return _ray;
 	}
 	
@@ -142,16 +147,35 @@ public class SimpleMotion {
          *  build z axis - h force 
          *
           * */
-
-    
-
-
+    	if (!_auto) return;
+    	Vector3 toNext = new Vector3();
+    	toNext.set(_position);
+    	toNext.sub(_point);
+   	
+    	 Log.w("Point","To next  " +Double.toString(toNext.x) + " "+Double.toString(toNext.y) + " "+Double.toString(toNext.z) + " ");
+    	 
+    	 Vector3 toz = new Vector3(0,0,1);
+    	 toz = orientation_.transform(toz);
+    	 Log.w("Point","Toz  " +Double.toString(toz.x) + " "+Double.toString(toz.y) + " "+Double.toString(toz.z) + " ");
+    	
+    	 Vector3 tox = new Vector3(1,0,0);
+    	 tox = orientation_.transform(tox);
+    	 Log.w("Point","Tox  " +Double.toString(tox.x) + " "+Double.toString(tox.y) + " "+Double.toString(tox.z) + " ");
+         toNext.nor();
+         tox.nor();
+    	 float dot = toNext.dot(tox);
+    	 Log.w("Point","Dot  " +Double.toString(dot));
+    	 float al = (float) Math.acos(dot);
+    	 al = (float) Math.toDegrees(al);
+    	 Log.w("Point","alpha  " +Double.toString(al));
+    	_vEnforce = al;
+    	
     }
     
 
 
 	public void update(double sec) {
-
+        updateAutopilotForces(sec);
 		_dis = (float) 1;
 	    float vDelta = (float) ((_vEnforce - _vEnforce_dis)*_dis*sec);
 		float vEnf = (float) (_vEnforce_dis - (vDelta));
