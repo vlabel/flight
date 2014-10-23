@@ -137,9 +137,12 @@ public class SimpleMotion {
 
     private void updateAutopilotForces(double sec) {
         /*   needs to calc new v and h enforces  
-         *
+         *  1 build vector to next point
+         *  get angle between x in plane frame  - vforce
+         *  build z axis - h force 
          *
           * */
+
     
 
 
@@ -148,9 +151,6 @@ public class SimpleMotion {
 
 
 	public void update(double sec) {
-
-        // renew priv positionCamera vby some type  (1 second);
-    // vEnforce - rotation over (010) by 
 
 		_dis = (float) 1;
 	    float vDelta = (float) ((_vEnforce - _vEnforce_dis)*_dis*sec);
