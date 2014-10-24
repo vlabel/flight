@@ -148,7 +148,7 @@ public class SimpleMotion {
          *
           * */
     	if (!_auto) return;
-    	Vector3 toNext = new Vector3();
+   /* 	Vector3 toNext = new Vector3();
     	toNext.set(_position);
     	toNext.sub(_point);
    	
@@ -168,7 +168,40 @@ public class SimpleMotion {
     	 float al = (float) Math.acos(dot);
     	 al = (float) Math.toDegrees(al);
     	 Log.w("Point","alpha  " +Double.toString(al));
-    	_vEnforce = al;
+    	_vEnforce = al; */
+
+    	Vector3 toNext = new Vector3();
+    	toNext.set(_position);
+    	toNext.sub(_point);
+    	Log.w("Point","To next  " +Double.toString(toNext.x) + " "+Double.toString(toNext.y) + " "+Double.toString(toNext.z) + " ");
+        toNext.nor();
+        
+
+        Vector3 yaxis = new Vector3(0,0,1);
+        yaxis.crs(toNext);
+        
+        Vector3 zaxis = new Vector3(0,0,0);
+        zaxis.set(yaxis);
+        zaxis.crs(toNext);
+
+
+        Quaternion qtoNew = new Quaternion(0,0,0,1);
+        qtoNew.setFromAxes(toNext.x,toNext.y,toNext.z,
+                            yaxis.x,yaxis.y,yaxis.z,
+                            zaxis.x,zaxis.y,zaxis.z);
+
+
+        float roll = qtoNew.getRoll();
+        float pitch = qtoNew.getPitch();
+        float yaw = qtoNew.getYaw();
+
+
+    	Log.w("Point","AutoPilot Rotation " +Float.toString(roll) + " "Float.toString(pitch) + " "+Float.toString(yaw) + " ");
+
+
+
+
+
     	
     }
     
@@ -179,7 +212,7 @@ public class SimpleMotion {
 		_dis = (float) 1;
 	    float vDelta = (float) ((_vEnforce - _vEnforce_dis)*_dis*sec);
 		float vEnf = (float) (_vEnforce_dis - (vDelta));
-		 Log.w("Point","Delt " +Float.toString(vDelta) + " " + Float.toString(_vEnforce) + " " + Float.toString(_vEnforce_dis));
+		 Log.w("Point","Delt " + Float.toString(vDelta) + " " + Float.toString(_vEnforce) + " " + Float.toString(_vEnforce_dis));
 		 
 		_vEnforce_dis += vDelta;
 		
