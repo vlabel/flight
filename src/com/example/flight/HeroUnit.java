@@ -17,7 +17,7 @@ public class HeroUnit extends FlyingObject{
 			_motion = new SimpleMotion();
 			  ModelInstance m = model();
 			  _motion.setAuto(true);
-			  _motion.setPoint(new Vector3(0,1110,0));
+			  _motion.setPoint(new Vector3(3110,10,333));
 			  // TODO Auto-generated constructor stub
 	}
 

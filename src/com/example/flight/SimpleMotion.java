@@ -24,9 +24,11 @@ public class SimpleMotion {
 	private double _delta;
     float _hEnforce;
     float _vEnforce;
+    float _aEnforce;
     
     float _hEnforce_dis;
     float _vEnforce_dis;
+    float _aEnforce_dis;
     float _dis;
     
     
@@ -170,39 +172,49 @@ public class SimpleMotion {
     	 Log.w("Point","alpha  " +Double.toString(al));
     	_vEnforce = al; */
 
+    	
+    	
     	Vector3 toNext = new Vector3();
-    	toNext.set(_position);
-    	toNext.sub(_point);
-    	Log.w("Point","To next  " +Double.toString(toNext.x) + " "+Double.toString(toNext.y) + " "+Double.toString(toNext.z) + " ");
-        toNext.nor();
+    	toNext.set(_point);
+    	toNext.sub(_position);
+    	toNext.nor();
+    	Log.w("Point","To next Y " +Double.toString(toNext.x) + " "+Double.toString(toNext.y) + " "+Double.toString(toNext.z) + " ");
         
-
-        Vector3 yaxis = new Vector3(0,0,1);
-        yaxis.crs(toNext);
+        
+       
+        Vector3 xaxis = new Vector3(0,0,1);
+        xaxis.crs(toNext);
+        xaxis.nor();
+        Log.w("Point","Yaxis  " +Double.toString(xaxis.x) + " "+Double.toString(xaxis.y) + " "+Double.toString(xaxis.z) + " ");
         
         Vector3 zaxis = new Vector3(0,0,0);
-        zaxis.set(yaxis);
-        zaxis.crs(toNext);
-
+        zaxis.set(toNext);
+        zaxis.crs(xaxis);
+        zaxis.nor();
+        Log.w("Point","Zaxis  " +Double.toString(zaxis.x) + " "+Double.toString(zaxis.y) + " "+Double.toString(zaxis.z) + " ");
 
         Quaternion qtoNew = new Quaternion(0,0,0,1);
-        qtoNew.setFromAxes(toNext.x,toNext.y,toNext.z,
-                            yaxis.x,yaxis.y,yaxis.z,
+        qtoNew = qtoNew.setFromAxes(
+                            
+                            toNext.x,toNext.y,toNext.z,
+                            xaxis.x,xaxis.y,xaxis.z,
                             zaxis.x,zaxis.y,zaxis.z);
+        
+        //Quaternion traver = new Quaternion(0, 0, 0, 1);
+        qtoNew = qtoNew.conjugate();
+        
+        qtoNew.mul(orientation_);
+        
+        float roll = qtoNew.getAngleAround(new Vector3(0,0,1));
+        float pitch = qtoNew.getAngleAround(new Vector3(1,0,0));
+        if (Float.isNaN(pitch)) pitch=0;
+        float yaw =qtoNew.getAngleAround(new Vector3(0,1,0));
+        if (Float.isNaN(yaw)) yaw = 0;
 
-
-        float roll = qtoNew.getRoll();
-        float pitch = qtoNew.getPitch();
-        float yaw = qtoNew.getYaw();
-
-
-    	Log.w("Point","AutoPilot Rotation " +Float.toString(roll) + " "Float.toString(pitch) + " "+Float.toString(yaw) + " ");
-
-
-
-
-
-    	
+    	Log.w("Point","AutoPilot Rotation " +Float.toString(roll) + " "+Float.toString(pitch) + " "+Float.toString(yaw) + " ");
+        _vEnforce = roll/180;
+        //_hEnforce = pitch/180;
+        _hEnforce = yaw/180;
     }
     
 
@@ -210,6 +222,7 @@ public class SimpleMotion {
 	public void update(double sec) {
         updateAutopilotForces(sec);
 		_dis = (float) 1;
+		Log.w("Point","vEnforce " + Float.toString(_vEnforce));
 	    float vDelta = (float) ((_vEnforce - _vEnforce_dis)*_dis*sec);
 		float vEnf = (float) (_vEnforce_dis - (vDelta));
 		 Log.w("Point","Delt " + Float.toString(vDelta) + " " + Float.toString(_vEnforce) + " " + Float.toString(_vEnforce_dis));
@@ -222,8 +235,18 @@ public class SimpleMotion {
          Quaternion hq = new Quaternion(new Vector3(0,0,1), -vEnf);
          Quaternion vq = new Quaternion(new Vector3(1,0,0),hEnf);
          Quaternion rq = new Quaternion(new Vector3(0,1,0),vEnf);
+         Quaternion aq = new Quaternion(new Vector3(0,1,0),0);
+         if (_auto) {
+        	 float aDelta = (float) ((_aEnforce - _aEnforce_dis)*_dis*sec);
+     		float aEnf = (float) (_aEnforce_dis - (aDelta));
+     		_aEnforce_dis += aDelta;
+     		 aq.set(new Vector3(0,1,0),aEnf);
+        	      	// hq.mul(aq);
+         }
          vq.mul(hq);
          orientation_.mul(vq);
+      //   if (_auto) orientation_.mul(aq);
+         
          orientation_ = orientation_.slerp(oldOrientation_, 1-(float) sec*18);
       //   rollOrientation_.set(0, 0, 0,1);
          rollOrientation_.mul(rq);
@@ -253,7 +276,7 @@ public class SimpleMotion {
 			tracePosition_.set(trace.remove());
 			
 		}
-		
+		Log.w("Point","Position " +Double.toString(_position.x) + " "+Double.toString(_position.y) + " "+Double.toString(_position.z) + " ");
 		
         // update model
 	}
