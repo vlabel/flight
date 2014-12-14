@@ -9,14 +9,15 @@ import android.content.res.AssetManager;
 public class BaseApp extends  AndroidApplication {
 	public AssetManager mgr;
 	  static {
-	    	System.loadLibrary("gnustl_shared");
-	        System.loadLibrary("stlport_shared");
-	        System.loadLibrary("JSBSim");
-	        System.loadLibrary("JSBVova");
-	        System.loadLibrary("jsbj");
+//	    	System.loadLibrary("gnustl_shared");
+//	        System.loadLibrary("stlport_shared");
+//	        System.loadLibrary("JSBSim");
+//	        System.loadLibrary("JSBVova");
+//	        System.loadLibrary("jsbj");
+		  System.loadLibrary("gdx");
 	    }
-	public native void setA(AssetManager mgr);
-    @Override
+//	public native void setA(AssetManager magr)
+//    {mgr = magr}
   
     public void onCreate(Bundle savedInstanceState) {
     	

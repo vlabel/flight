@@ -16,7 +16,7 @@ public class StartGame extends Game {
 	}
 	
     public void create() {
-    	base.setA(manager);
+    //	base.setA(manager);
     	mgr = new AssetManager();
         setScreen(new GamePlay(this));
    }
