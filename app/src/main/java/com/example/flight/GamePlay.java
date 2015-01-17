@@ -52,6 +52,7 @@ public class GamePlay implements Screen {
 	public Model runway;
 	public ModelInstance runwayInstance;
 	public Model skydome;
+    private PlaneFactory factory_;
 	public ModelInstance skyDomeInstance;
 	public StartGame game;
 	public GroupLoader loader;
@@ -95,7 +96,8 @@ public class GamePlay implements Screen {
     
 
     private void createHero() {
-    	hero_ = new HeroUnit(game.mgr,"data/Su-27_Flanker.g3db" , "Su-27",false);
+    	//hero_ = new HeroUnit(game.mgr,"data/Su-27_Flanker.g3db" , "Su-27",false);
+        hero_ = factory_.getHero("Su-27",false);
     }
 
     
@@ -109,6 +111,7 @@ public class GamePlay implements Screen {
 	    loader.setManager(game.mgr);
 	    loader.init();
 	    m_jsbProvider = new JSBMotionProvider();
+        factory_ = new PlaneFactory(game.mgr);
 	    /* Test Create */
 	    environment = new Environment();
 	    environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
@@ -161,11 +164,14 @@ public class GamePlay implements Screen {
         //modelBatch.render(skyDomeInstance, environment);
         modelBatch.render(loader.m_instances,environment);
         modelBatch.render(hero_.model(),environment);
+        for (Missile mis : hero_.missiles()) {
+            modelBatch.render(mis.model(),environment);
+        }
+
+
         modelBatch.render(enemy_.model(),environment);
-       // modelBatch.render(models),environment);// get all models from 
-        // modelsManager
+
         updateCamera();
- //       hero_.update(delta,slider.getValue(),sliderAiler.getValue());
         hero_.update(delta,touchpad.getKnobPercentY(),touchpad.getKnobPercentX(),sliderAiler.getValue());
         enemy_.update(delta,touchpad.getKnobPercentY(),touchpad.getKnobPercentX(),sliderAiler.getValue());
         modelBatch.end();
@@ -191,7 +197,9 @@ public class GamePlay implements Screen {
 	    
 	 	}
 	
-	
+
+
+
 	public void validatePosition() {
 			/*float x = PlanePosition.x(); 
 			float y = PlanePosition.y();

@@ -12,14 +12,15 @@ import java.util.ArrayList;
 
 public class HeroUnit extends FlyingObject{
 	private SimpleMotion _motion;
+    private ArrayList<Missile> missiles_;
+
 	HeroUnit(AssetManager mgr, String modelPath, String plane,boolean auto) {
 		
 		super(mgr, modelPath, plane);
-			//initMotionrovider();
 		_motion = new SimpleMotion();
 		ModelInstance m = model();
 		_motion.setAuto(auto);
-
+        missiles_ = new ArrayList<Missile>();
         ArrayList<Vector3> rr = new ArrayList<Vector3>();
         rr.add(new Vector3(4000,0,500));
         rr.add(new Vector3(-8000,0,400));
@@ -47,7 +48,9 @@ public class HeroUnit extends FlyingObject{
 	}
 
 	
-	
+public void addMissile(Missile m) {
+    missiles_.add(m);
+}
 	
  public Vector3 position() {
 	return _motion.position();
@@ -77,5 +80,20 @@ public void update(double seconds,float sliderH,float sliderV,float sliderR) {
   float z = _motion.position().z;
   // m.transform.set(_motion.position(), _motion.orientation());
   m.transform.set(_motion.position(), _motion.resultOrientation());
+    for (Missile miss: missiles_) {
+        miss.update(seconds,0,0,0);
+   }
+
 }
+
+public    ArrayList<Missile>  missiles() {
+       return missiles_;
+}
+
+
+    public void setMissiles_(ArrayList<Missile> missiles_) {
+        this.missiles_ = missiles_;
+    }
+
+
 }

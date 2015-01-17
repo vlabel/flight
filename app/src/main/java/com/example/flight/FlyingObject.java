@@ -5,6 +5,7 @@ import android.R.string;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -22,7 +23,12 @@ public class FlyingObject implements RenderableProvider {
 	//	m_motionProvider.init(plane);
 			// TODO Auto-generated constructor stub
 	}
-	
+	public void scaleModel(Float scale) {
+        model_.transform.setToScaling(scale,scale,scale);
+
+    }
+
+
 	@Override
 	public void getRenderables(Array<Renderable> arg0, Pool<Renderable> arg1) {
 		// TODO Auto-generated method stub
